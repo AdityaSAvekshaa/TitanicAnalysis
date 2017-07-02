@@ -1,0 +1,8 @@
+pig1= load 'hdfs://localhost:9000/user/acadgild/share/titanic' using PigStorage(',') as pid:chararray, survive:int, pclass:int,pname:chararray,sex:chararray,age:int,sibsp:chararray,parch:chararray,tckt:chararray,fare:float,cabin:chararray,
+embrk:chararray);
+
+pig2 = group pig1 by pclass;
+
+avg = foreach pig2 generate AVG(pig1.fare);
+
+STORE avg into 'output';

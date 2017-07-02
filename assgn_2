@@ -1,0 +1,18 @@
+pig1= load 'hdfs://localhost:9000/user/acadgild/share/titanic' using PigStorage(',') as (pid:chararray, survive:int, pclass:int,pname:chararray,sex:chararray,age:int,sibsp:chararray,parch:chararray,tckt:chararray,fare:float,cabin:chararray,
+embrk:chararray);
+
+pig2 = group pig1 by pclass;
+
+pig12 = foreach pig2 generate COUNT(pig1.pclass);
+
+pig22 = filter pig1 by survive<1;
+
+pig32 = filter pig22 by (embrk == 'S');
+
+pig42 = group pig32 ALL;
+
+pig52 = foreach pig42 generate COUNT(pig32);
+
+STORE pig32 INTO 'output1';
+
+STORE pig52 INTO 'output1.1';
